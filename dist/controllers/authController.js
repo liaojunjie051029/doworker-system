@@ -1,0 +1,82 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.login = exports.register = void 0;
+// 导入用户模型（操作数据库的用户表）
+const User_1 = __importDefault(require("../models/User"));
+// 导入密码加密库
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+// 导入 token 生成库
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// 导入环境变量库
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+// ======================
+// 1. 用户注册接口
+// ======================
+const register = async (req, res) => {
+    try {
+        // 从前端请求体里获取 用户名、密码
+        const { username, password } = req.body;
+        // 密码加密：把明文密码加密成乱码，10 是加密强度
+        const hashedPwd = await bcryptjs_1.default.hash(password, 10);
+        // 把用户信息存入数据库
+        const user = await User_1.default.create({
+            username, // 用户名
+            password: hashedPwd, // 加密后的密码（绝不存明文！）
+        });
+        // 返回给前端：注册成功 + 用户信息（不返回密码）
+        res.json({
+            msg: '注册成功',
+            user: { id: user._id, username: user.username },
+        });
+    }
+    catch (err) {
+        // 出错：比如用户名重复
+        res.status(500).json({
+            msg: '注册失败',
+        });
+    }
+};
+exports.register = register;
+// ======================
+// 2. 用户登录接口
+// ======================
+const login = async (req, res) => {
+    try {
+        // 从前端获取用户名、密码
+        const { username, password } = req.body;
+        // 1. 查数据库：有没有这个用户
+        const user = await User_1.default.findOne({ username });
+        if (!user)
+            return res.status(400).json({
+                msg: '用户不存在',
+            });
+        // 2. 验证密码：前端输入的密码 vs 数据库加密密码
+        const isMatch = await bcryptjs_1.default.compare(password, user.password);
+        if (!isMatch)
+            return res.status(400).json({
+                msg: '密码错误',
+            });
+        // 3. 登录成功 → 生成 token（给前端用来证明登录了）
+        const token = jsonwebtoken_1.default.sign({ id: user._id, username: user.username }, // 存在 token 里的用户信息
+        process.env.JWT_SECRET, // 密钥（保密）
+        { expiresIn: '1d' } // 1天后过期
+        );
+        //修改用户状态为登录中
+        await User_1.default.updateOne({ username }, { $set: { status: 'online' } });
+        // 4. 返回 token 给前端
+        res.json({
+            msg: '登录成功',
+            token,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            msg: '登录失败',
+        });
+    }
+};
+exports.login = login;
