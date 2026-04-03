@@ -5,14 +5,16 @@ import type { Request,Response } from "express";
 export const addworkrecord = async (req:Request,res:Response) => {
   try{
     const workrecord = await WorkRecord.create(req.body);
-    res.json({
+   res.json({
+      code: 200,
       msg:'新增做工数据成功',
       data:workrecord,
     })
   }catch(err){
-    res.status(500).json({
+    res.json({
+      code: 500,
       msg:'新增做工数据失败',
-      err
+      data: null
     })
   }
 } 
@@ -21,13 +23,15 @@ export const getworkrecordList = async (req:Request,res:Response) =>{
   try{
     const workrecord = await WorkRecord.find();
     res.json({
+      code: 200,
       msg:'获取做工数据列表成功',
       data:workrecord,
     });
   }catch(err){
-    res.status(500).json({
+    res.json({
+      code: 500,
       msg:'获取做工数据列表失败',
-      err
+      data: null
     })
   }
 }
@@ -37,13 +41,15 @@ export const getworkrecordDetail = async (req:Request,res:Response) => {
   try{
     const workrecord = await WorkRecord.findOne({_id:req.params.id})
     res.json({
+      code: 200,
       msg:'获取做工数据详情成功',
       data:workrecord
     })
   }catch(err){
-    res.status(500).json({
+    res.json({
+      code: 500,
       msg:'获取做工数据详情失败',
-      err
+      data: null
     })
   }
 }
@@ -56,19 +62,17 @@ export const updateWorkRecord = async (req:Request,res:Response) =>{
     const workrecord = await WorkRecord.findOne({_id:req.params.id})
 
     if(result.modifiedCount === 0){
-      return res.status(500).json({
-        msg:'修改工人数据失败'
+      return res.json({
+        code: 500,
+        msg:'修改工人数据失败',
+        data: null
       })
     }
-
-    res.json({
-      msg:'更新做工数据成功',
-      data:workrecord
-    })
   }catch(err){
-    res.status(500).json({
+    res.json({
+      code: 500,
       msg:'更新做工数据失败',
-      err
+      data: null
     })
   }
 }
@@ -77,12 +81,16 @@ export const updateWorkRecord = async (req:Request,res:Response) =>{
 export const deleteWorkRecord = async (req:Request ,res:Response)=>{
   try{
     await WorkRecord.deleteOne({_id:req.params.id})
-    res.json({
-      msg:'删除做工数据成功'
+   res.json({
+      code: 200,
+      msg:'删除做工数据成功',
+      data: null
     })
   }catch{
-    res.status(500).json({
-      msg:'删除做工数据失败'
+    res.json({
+      code: 500,
+      msg:'删除做工数据失败',
+      data: null
     })
   }
 }

@@ -6,12 +6,15 @@ const createProject = async (req: Request, res: Response) =>{
   try{
     const project = await Project.create(req.body);
     res.json({
-      msg: '创建项目数据成功',
+      code: 200,
+      msg: "创建项目数据成功",
       data: project,
     });
   }catch(err){ 
-    res.status(500).json({
-      msg: '创建项目数据失败',
+    res.json({
+      code: 500,
+      msg: "创建项目数据失败",
+      data: null,
     });
   }
 }
@@ -21,12 +24,15 @@ const getProjectList = async (req: Request, res: Response) =>{
   try{
     const projects = await Project.find();
     res.json({
-      msg: '获取项目数据列表成功',
+      code: 200,
+      msg: "获取项目数据列表成功",
       data: projects,
     });
   }catch(err){
-    res.status(500).json({
-      msg: '获取项目数据列表失败',
+    res.json({
+      code: 500,
+      msg: "获取项目数据列表失败",
+      data: null,
     });
   }
 }
@@ -36,12 +42,15 @@ const getProjectDetail = async (req:Request , res:Response) =>{
   try{
     const project = await Project.findOne({_id:req.params.id});
     res.json({
-      msg: '获取项目数据详情成功',
+      code: 200,
+      msg: "获取项目数据详情成功",
       data: project,
     });
   }catch(err){
-    res.status(500).json({
-      msg: '获取项目数据详情失败',
+    res.json({
+      code: 500,
+      msg: "获取项目数据详情失败",
+      data: null,
     });
   }
 }
@@ -54,18 +63,23 @@ const updateProject = async (req:Request , res:Response) =>{
     const project = await Project.findOne({_id:req.params.id});
 
     if(result.modifiedCount === 0){
-      return res.status(500).json({
-        msg: '更新项目数据失败',
+      return res.json({
+        code: 500,
+        msg: "更新项目数据失败",
+        data: null,
       });
     }
 
     res.json({
-      msg: '更新项目数据成功',
+      code: 200,
+      msg: "更新项目数据成功",
       data: project,
     });
   }catch(err){
-    res.status(500).json({
-      msg: '更新项目数据失败',
+    res.json({
+      code: 500,
+      msg: "更新项目数据失败",
+      data: null,
     });
   }
 }
@@ -75,11 +89,15 @@ const deleteProject = async (req:Request , res:Response) =>{
   try{
     await Project.deleteOne({_id:req.params.id});
     res.json({
-      msg: '删除项目数据成功',
+      code: 200,
+      msg: "删除项目数据成功",
+      data: null,
     });
   }catch(err){
-    res.status(500).json({
-      msg: '删除项目数据失败',
+    res.json({
+      code: 500,
+      msg: "删除项目数据失败",
+      data: null,
     });
   }
 }

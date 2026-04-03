@@ -29,13 +29,19 @@ export const register = async (req: Request, res: Response) =>{
 
     // 返回给前端：注册成功 + 用户信息（不返回密码）
     res.json({
+      code: 200,
       msg: '注册成功',
-      user: { id: user._id, username:user.username },
+      data: {
+        id: user._id,
+        username: user.username
+      }
     });
   }catch(err){
     // 出错：比如用户名重复
-    res.status(500).json({
-      msg: '注册失败',
+    res.status(200).json({
+      code: 500,
+      msg: '注册失败，用户名可能已存在',
+      data: null
     });
   }
 };
@@ -50,18 +56,28 @@ export const login = async (req: Request, res: Response) =>{
 
     // 1. 查数据库：有没有这个用户
     const user = await User.findOne({username});
-    if(!user) return  res.status(400).json({
-      msg: '用户不存在',
-    });
+    if(!user) {
+      // 用户不存在
+      return res.status(200).json({
+        code: 400,
+        msg: '用户不存在',
+        data: null
+      });
+    }
 
      // 2. 验证密码：前端输入的密码 vs 数据库加密密码
     const isMatch = await bcrypt.compare(password,user.password);
-    if(!isMatch) return  res.status(400).json({
-      msg: '密码错误',
-    });
+    if(!isMatch) {
+      return res.status(200).json({
+        code: 400,
+        msg: '密码错误',
+        data: null
+      });
+    }
 
     // 3. 登录成功 → 生成 token（给前端用来证明登录了）
-    const token = jwt.sign({ id: user._id ,username: user.username },// 存在 token 里的用户信息
+    const token = jwt.sign(
+      { id: user._id ,username: user.username },// 存在 token 里的用户信息
       process.env.JWT_SECRET!,     // 密钥（保密）
       { expiresIn: '1d' }          // 1天后过期
     );
@@ -71,12 +87,16 @@ export const login = async (req: Request, res: Response) =>{
 
     // 4. 返回 token 给前端
     res.json({
+      code: 200,
       msg: '登录成功',
-      token,
+      data: { token }  // 把 token 放进 data 里
     });
   }catch(err){ 
-    res.status(500).json({
-      msg: '登录失败',
+    // 系统异常
+    res.status(200).json({
+      code: 500,
+      msg: '登录失败，服务器异常',
+      data: null
     });
   }
 }
