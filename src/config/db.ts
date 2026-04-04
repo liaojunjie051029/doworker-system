@@ -1,3 +1,6 @@
+// 全局设置时区：北京时间
+process.env.TZ = 'Asia/Shanghai';
+
 import mongoose from 'mongoose'; // 1. 导入 mongoose 库（用来操作 MongoDB 数据库的工具）
 import dotenv from 'dotenv'; // 2. 导入 dotenv 库（用来读取 .env 文件里的环境变量）
 dotenv.config(); // 3. 加载 .env 文件里的配置（让 process.env 能读到里面的内容）
