@@ -94,3 +94,37 @@ export const deleteWorkRecord = async (req:Request ,res:Response)=>{
     })
   }
 }
+
+//通过工人id获取做工记录
+export const getworkrecordDetailByWorkerId = async (req:Request,res:Response) =>{
+  try{
+    const workrecord = await WorkRecord.find({workerId:req.params.id})
+    res.json({
+      code: 200,
+      msg:'获取做工数据列表成功',
+      data:workrecord,
+    });
+  }catch(err){ 
+    res.json({
+      code: 500,
+      msg:'获取做工数据列表失败',
+      data: null
+    })
+  }
+}
+
+//通过项目id获取做工记录
+export const getworkrecordDetailByProjectId = async (req:Request,res:Response) =>{
+  try{
+    const workrecord = await WorkRecord.find({projectId:req.params.id})
+    res.json({
+      code: 200,
+      msg:'获取做工数据列表成功',
+      data:workrecord,
+    });
+  }catch(err){ 
+    res.json({
+      code: 500,
+    })
+  }
+}
