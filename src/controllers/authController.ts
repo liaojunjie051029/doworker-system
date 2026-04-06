@@ -85,12 +85,11 @@ export const login = async (req: Request, res: Response) =>{
     //修改用户状态为登录中
     await User.updateOne({username},{$set:{status:'online'}});
 
-    const userInfo = {...user , password:''}
     // 4. 返回 token 给前端
     res.json({
       code: 200,
       msg: '登录成功',
-      data: { token,userInfo }  // 把 token 放进 data 里
+      data: { token,user }  // 把 token 放进 data 里
     });
   }catch(err){ 
     // 系统异常
