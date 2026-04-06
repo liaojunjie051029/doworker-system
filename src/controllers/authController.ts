@@ -90,7 +90,7 @@ export const login = async (req: Request, res: Response) =>{
     res.json({
       code: 200,
       msg: '登录成功',
-      data: { token,user }  // 把 token 放进 data 里
+      data: { token,userInfo }  // 把 token 放进 data 里
     });
   }catch(err){ 
     // 系统异常
