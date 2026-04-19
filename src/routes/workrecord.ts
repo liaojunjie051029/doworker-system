@@ -1,7 +1,7 @@
 import express from "express";
 import authMiddleware from "../middleware/auth";
 //导入控制层
-import {addworkrecord, getworkrecordList, getworkrecordDetail, deleteWorkRecord, updateWorkRecord, getworkrecordDetailByWorkerId, getworkrecordDetailByProjectId} from "../controllers/workrecordController"
+import {addworkrecord, getworkrecordList, getworkrecordDetail, deleteWorkRecord, updateWorkRecord, getworkrecordDetailByWorkerId, getworkrecordDetailByProjectId,searchworkerrecord} from "../controllers/workrecordController"
 
 const router : express.Router = express.Router();
 router.use(authMiddleware);
@@ -16,5 +16,7 @@ router.post('/deleteWorkRecord/:id',deleteWorkRecord);
 router.get('/getWorkRecordByWorkerId/:id',getworkrecordDetailByWorkerId);
 //通过项目id获取做工记录
 router.get('/getWorkRecordByProjectId/:id',getworkrecordDetailByProjectId);
+// 模糊搜索
+router.get('/searchworkerrecord',searchworkerrecord);
 
 export default router;

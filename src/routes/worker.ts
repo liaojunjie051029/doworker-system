@@ -1,7 +1,7 @@
 import express from 'express'
 import authMiddleware from '../middleware/auth'; // 导入自定义的中间件
 //导入控制层
-import { getWorkerList, addWorker, getWorkerDetail, deleteWorker, updateWorker } from '../controllers/workerController';
+import { getWorkerList, addWorker, getWorkerDetail, deleteWorker, updateWorker, searchworker } from '../controllers/workerController';
 // 3. ✅ 给 router 加类型注释：Express.Router
 const router : express.Router = express.Router();
 //导入中间件
@@ -18,6 +18,8 @@ router.get('/workerDetail/:id', getWorkerDetail);
 router.patch('/updateWorker/:id', updateWorker);
 //删除工人数据
 router.post('/deleteWorker/:id', deleteWorker);
+//搜索工人数据
+router.get('/searchworker', searchworker);
 
 
 //导出 router

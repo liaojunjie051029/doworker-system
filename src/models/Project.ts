@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 // 项目表结构（和 User、Worker 风格完全一致）
 const projectSchema = new mongoose.Schema(
   {
+    userId: {  // 新增字段
+    type: String,
+    required: true
+  },
     projectName: {
       type: String,
       required: true, // 项目名称（必填）
@@ -31,6 +35,13 @@ const projectSchema = new mongoose.Schema(
         num: Number, // 耗材数量
         unit: String, // 耗材单位
         cost: Number, // 耗材花费单价
+        time: {
+          type: Date,
+          default: Date.now, // 默认当前时间
+          //设置只读
+          readOnly: true,
+        }, // 耗材购买时间
+
       })
     ],
 

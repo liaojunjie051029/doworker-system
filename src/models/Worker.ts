@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const workerSchema = new mongoose.Schema({
+  userId: {  // 新增字段
+    type: String,
+    required: true
+  },
   name:{// 工人姓名
     type:String,
     required:true

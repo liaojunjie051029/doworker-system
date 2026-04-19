@@ -14,6 +14,8 @@ import workerRoutes from './routes/worker';
 import projectRoutes from './routes/project';
 //4.4 导入做工记录路由 （做工数据接口）
 import workrecordRoutes from './routes/workrecord';
+// 4.5 导入计算数据路由（卡片数据接口）
+import computedRoutes from "./routes/computed";
 
 
 // 5. 创建 express 应用实例（整个后端服务的核心）
@@ -44,6 +46,8 @@ app.use('/api/worker', workerRoutes);
 app.use('/api/project', projectRoutes);
 //做工记录接口 → /api/workrecord/workrecordList
 app.use('/api/workrecord' ,workrecordRoutes)
+// 计算数据接口 → /api/computed/cardData
+app.use('/api/computed' , computedRoutes)
 
 // ———————————— 启动服务 ————————————
 

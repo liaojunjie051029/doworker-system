@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 // 做工记录表结构
 const WorkRecordSchema = new mongoose.Schema(
   {
+    userId: {  // 新增字段
+    type: String,
+    required: true
+  },
     workerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Worker", // 关联工人模型
@@ -12,6 +16,14 @@ const WorkRecordSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project", // 关联项目模型
       required: true, // 项目必填
+    },
+    workerName: { // 工人名称
+      type: String,
+      required: true, // 工人名称必填
+    },
+    projectName: { // 项目名称
+      type: String,
+      required: true, // 项目名称必填
     },
     workDate: {
       type: Date,

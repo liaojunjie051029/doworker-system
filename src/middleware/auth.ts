@@ -8,7 +8,7 @@ dotenv.config();
 
 // 4. TypeScript 扩展 Express 请求类型
 // 给 req 加一个 user 属性，用来存放验证后的用户信息
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: any; // ? 表示可选，any 暂时允许任意类型
 }
 
